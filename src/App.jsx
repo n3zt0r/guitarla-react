@@ -1,59 +1,19 @@
-import { useEffect, useState } from "react";
 import Guitar from "./components/Guitar";
 import Header from "./components/Header";
-import { db } from "./data/db";
+import { useCart } from "./hooks/useCart";
 
 function App() {
-  const initialCart = () => {
-    const localStorageCart = localStorage.getItem("cart");
-    return localStorageCart ? JSON.parse(localStorageCart) : [];
-  };
-
-  // eslint-disable-next-line no-unused-vars
-  const [data, setData] = useState(db);
-  const [cart, setCart] = useState(initialCart());
-
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
-
-  const addToCart = (item) => {
-    const itemExist = cart.findIndex((guitar) => guitar.id === item.id);
-    if (itemExist >= 0) {
-      const updatedCart = [...cart];
-      updatedCart[itemExist].quantity++;
-      setCart(updatedCart);
-    } else {
-      item.quantity = 1;
-      setCart([...cart, item]);
-    }
-  };
-
-  const removeFromCart = (id) => {
-    setCart((prevCart) => prevCart.filter((guitar) => id !== guitar.id));
-  };
-
-  const incraseQuantity = (id) => {
-    const itemExist = cart.findIndex((guitar) => guitar.id === id);
-    const updatedCart = [...cart];
-    updatedCart[itemExist].quantity++;
-    setCart(updatedCart);
-  };
-
-  const decreaseQuantity = (id) => {
-    const itemExist = cart.findIndex((guitar) => guitar.id === id);
-    const updatedCart = [...cart];
-    const quantity = (updatedCart[itemExist].quantity -= 1);
-    if (quantity < 1) {
-      removeFromCart(id);
-    } else {
-      setCart(updatedCart);
-    }
-  };
-
-  const clearCart = () => {
-    setCart([]);
-  };
+  const {
+    data,
+    cart,
+    addToCart,
+    removeFromCart,
+    incraseQuantity,
+    decreaseQuantity,
+    clearCart,
+    isEmpty,
+    cartTotal,
+  } = useCart();
 
   return (
     <>
@@ -63,6 +23,8 @@ function App() {
         incraseQuantity={incraseQuantity}
         decreaseQuantity={decreaseQuantity}
         clearCart={clearCart}
+        isEmpty={isEmpty}
+        cartTotal={cartTotal}
       />
 
       <main className="container-xl mt-5">
