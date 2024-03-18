@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Guitar from "./components/Guitar";
 import Header from "./components/Header";
 import { db } from "./data/db";
 
 function App() {
+  const initialCart = () => {
+    const localStorageCart = localStorage.getItem("cart");
+    return localStorageCart ? JSON.parse(localStorageCart) : [];
+  };
+
   // eslint-disable-next-line no-unused-vars
   const [data, setData] = useState(db);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(initialCart());
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
 
   const addToCart = (item) => {
     const itemExist = cart.findIndex((guitar) => guitar.id === item.id);
