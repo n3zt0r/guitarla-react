@@ -1,3 +1,15 @@
+import { CartItem, Guitar } from "../types";
+
+type HeadersProps = {
+  cart: CartItem[];
+  removeFromCart: (id: Guitar["id"]) => void;
+  incraseQuantity: (id: Guitar["id"]) => void;
+  decreaseQuantity: (id: Guitar["id"]) => void;
+  clearCart: () => void;
+  isEmpty: boolean;
+  cartTotal: number;
+};
+
 export default function Header({
   cart,
   removeFromCart,
@@ -6,7 +18,7 @@ export default function Header({
   clearCart,
   isEmpty,
   cartTotal,
-}) {
+}: HeadersProps) {
   return (
     <header className="py-5 header">
       <div className="container-xl">
@@ -106,5 +118,3 @@ export default function Header({
     </header>
   );
 }
-
-Header.propTypes;
